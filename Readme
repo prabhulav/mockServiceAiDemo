@@ -1,5 +1,12 @@
 The goal is to set up a mock service using lambda that can be used for testing AI agents
 
 Instructions to add end points 
+* update template.yaml with new end point infomration 
+* update demoBankMock file with the method 
+* udpate data requires 
+* update test events 
 
 Instruction to Deploy 
+* build > sam build
+* test > sam local invoke -e events/event-paymentdue-400.json
+* deploy > sam deploy 

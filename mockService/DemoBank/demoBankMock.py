@@ -940,6 +940,143 @@ csv_transaction_data = [
     }
 ]
 
+csv_paymentdue_data = [
+    {
+        "AccountNumber": "ACC12345",
+        "PaymentDueDate": "8/1/2024",
+        "FullPaymentAmount": 500,
+        "MinimumPaymentDue": 50,
+        "InterestCharged": 10,
+        "LatePaymentPenalty": 5,
+        "PointsEarned": 25
+    },
+    {
+        "AccountNumber": "ACC12346",
+        "PaymentDueDate": "8/5/2024",
+        "FullPaymentAmount": 450,
+        "MinimumPaymentDue": 45,
+        "InterestCharged": 9,
+        "LatePaymentPenalty": 10,
+        "PointsEarned": 20
+    },
+    {
+        "AccountNumber": "ACC12347",
+        "PaymentDueDate": "8/10/2024",
+        "FullPaymentAmount": 600,
+        "MinimumPaymentDue": 60,
+        "InterestCharged": 12,
+        "LatePaymentPenalty": 0,
+        "PointsEarned": 30
+    },
+    {
+        "AccountNumber": "ACC12348",
+        "PaymentDueDate": "8/15/2024",
+        "FullPaymentAmount": 700,
+        "MinimumPaymentDue": 70,
+        "InterestCharged": 14,
+        "LatePaymentPenalty": 8,
+        "PointsEarned": 35
+    },
+    {
+        "AccountNumber": "ACC12349",
+        "PaymentDueDate": "8/20/2024",
+        "FullPaymentAmount": 550,
+        "MinimumPaymentDue": 55,
+        "InterestCharged": 11,
+        "LatePaymentPenalty": 15,
+        "PointsEarned": 28
+    },
+    {
+        "AccountNumber": "ACC12350",
+        "PaymentDueDate": "8/25/2024",
+        "FullPaymentAmount": 480,
+        "MinimumPaymentDue": 48,
+        "InterestCharged": 9.6,
+        "LatePaymentPenalty": 7,
+        "PointsEarned": 22
+    },
+    {
+        "AccountNumber": "ACC12351",
+        "PaymentDueDate": "8/30/2024",
+        "FullPaymentAmount": 530,
+        "MinimumPaymentDue": 53,
+        "InterestCharged": 10.6,
+        "LatePaymentPenalty": 6,
+        "PointsEarned": 27
+    },
+    {
+        "AccountNumber": "ACC12352",
+        "PaymentDueDate": "9/1/2024",
+        "FullPaymentAmount": 620,
+        "MinimumPaymentDue": 62,
+        "InterestCharged": 12.4,
+        "LatePaymentPenalty": 12,
+        "PointsEarned": 32
+    },
+    {
+        "AccountNumber": "ACC12353",
+        "PaymentDueDate": "9/5/2024",
+        "FullPaymentAmount": 570,
+        "MinimumPaymentDue": 57,
+        "InterestCharged": 11.4,
+        "LatePaymentPenalty": 0,
+        "PointsEarned": 25
+    },
+    {
+        "AccountNumber": "ACC12354",
+        "PaymentDueDate": "9/10/2024",
+        "FullPaymentAmount": 650,
+        "MinimumPaymentDue": 65,
+        "InterestCharged": 13,
+        "LatePaymentPenalty": 9,
+        "PointsEarned": 30
+    },
+    {
+        "AccountNumber": "ACC12355",
+        "PaymentDueDate": "9/15/2024",
+        "FullPaymentAmount": 490,
+        "MinimumPaymentDue": 49,
+        "InterestCharged": 9.8,
+        "LatePaymentPenalty": 5,
+        "PointsEarned": 20
+    },
+    {
+        "AccountNumber": "ACC12356",
+        "PaymentDueDate": "9/20/2024",
+        "FullPaymentAmount": 710,
+        "MinimumPaymentDue": 71,
+        "InterestCharged": 14.2,
+        "LatePaymentPenalty": 14,
+        "PointsEarned": 34
+    },
+    {
+        "AccountNumber": "ACC12357",
+        "PaymentDueDate": "9/25/2024",
+        "FullPaymentAmount": 540,
+        "MinimumPaymentDue": 54,
+        "InterestCharged": 10.8,
+        "LatePaymentPenalty": 8,
+        "PointsEarned": 26
+    },
+    {
+        "AccountNumber": "ACC12358",
+        "PaymentDueDate": "9/30/2024",
+        "FullPaymentAmount": 600,
+        "MinimumPaymentDue": 60,
+        "InterestCharged": 12,
+        "LatePaymentPenalty": 0,
+        "PointsEarned": 29
+    },
+    {
+        "AccountNumber": "ACC12359",
+        "PaymentDueDate": "10/1/2024",
+        "FullPaymentAmount": 550,
+        "MinimumPaymentDue": 55,
+        "InterestCharged": 11,
+        "LatePaymentPenalty": 10,
+        "PointsEarned": 24
+    }
+]
 
 
 def lambda_handler(event, context):
@@ -963,6 +1100,9 @@ def lambda_handler(event, context):
 
       return_val = transaction(id_parm)
 
+    elif path == '/paymentdue' and http_method == 'GET':
+
+      return_val = paymentdue(id_parm)
 
     else:
       return_val = {
@@ -973,6 +1113,27 @@ def lambda_handler(event, context):
         }
 
     return return_val
+
+def paymentdue(id_parm):
+
+  result = next((item for item in csv_paymentdue_data if item["AccountNumber"] == id_parm), None) 
+
+
+  if result:
+
+    return {
+              "statusCode": 200,
+              "body": json.dumps(result),
+          }
+   
+  else: 
+        return {
+            "statusCode": 400,
+            "body": json.dumps({
+                "message": "Payment information not available for the account ID",
+                "id": id_parm,
+            }),
+        }
 
 def transaction(id_parm):
   
